@@ -1,0 +1,682 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffc0cb;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative; /* Added for better positioning */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #4a1e1e;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.chocolate-wrapper {
+  position: relative;
+  width: 600px;
+  height: 260px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chocolate-bar {
+  position: relative;
+  width: 120%;
+  height: 110%;
+}
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  z-index: 2;
+  perspective: 1500px;
+  transform-style: preserve-3d;
+  user-select: none;
+}
+
+.wrapper-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 8px;
+  transition: none;
+  transform-origin: right center;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  user-select: none;
+
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  pointer-events: none;
+}
+
+/* Only add transition when dragging or unwrapping */
+.wrapper.dragging .wrapper-img,
+.wrapper.unwrapped .wrapper-img {
+  transition: transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Full unwrap animation */
+.wrapper.unwrapped {
+  pointer-events: none;
+}
+
+.wrapper.unwrapped .wrapper-img {
+  transform: translateX(200%) rotateY(-120deg);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Remove the shine animation that was causing the initial movement */
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+/* Simplify the dragging effect */
+.wrapper.dragging .wrapper-img {
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.chocolate {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #4d1f1f;
+  border-radius: 12px;
+  z-index: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chocolate-pieces {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  padding: 8px;
+  width: 90%;
+  height: 90%;
+  box-sizing: border-box;
+}
+
+.piece {
+  background: #4e2d2d;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* Enhanced 3D beveled effect for Dairy Milk look */
+  background: linear-gradient(
+    145deg,
+    #664242 0%,
+    #4e2d2d 30%,
+    #4e2d2d 70%,
+    #3a1f1f 100%
+  );
+  box-shadow:
+    -2px -2px 4px rgba(255, 255, 255, 0.1),
+    2px 2px 4px rgba(0, 0, 0, 0.3),
+    inset 1px 1px 3px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced beveled edges for authentic chocolate look */
+.piece::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
+/* Diagonal Cadbury text with enhanced embossing */
+.piece::after {
+  content: "Mohor";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  color: rgba(78, 45, 45, 0.9);
+  font-family: "Dancing Script", cursive; /* Updated to cursive font */
+  font-size: 1.5em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  width: 140%;
+  text-align: center;
+  text-shadow:
+    -0.5px -0.5px 1px rgba(0, 0, 0, 0.3),
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.1);
+}
+
+.piece:hover {
+  transform: scale(0.98);
+  background: linear-gradient(
+    145deg,
+    #5a3a3a 0%,
+    #4e2d2d 40%,
+    #4e2d2d 60%,
+    #3a1f1f 100%
+  );
+  box-shadow:
+    -1px -1px 2px rgba(255, 255, 255, 0.08),
+    1px 1px 2px rgba(0, 0, 0, 0.2),
+    inset 2px 2px 4px rgba(0, 0, 0, 0.15),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+}
+
+/* Smooth eating animation */
+.piece.eaten {
+  opacity: 0;
+  transform: scale(0) rotate(45deg);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Enhanced 3D effect on hover */
+.piece:hover::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+/* Heart Piece Styling */
+.piece.heart {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  z-index: 10;
+}
+
+.piece.heart::before,
+.piece.heart::after {
+  display: none; /* Hide default highlight/text */
+}
+
+/* The actual heart shape using CSS geometry */
+.heart-shape {
+  position: relative;
+  width: 78px; /* Maximized to 78px */
+  height: 78px;
+  background: linear-gradient(
+    100deg,
+    #ff69b4,
+    #d4145a
+  ); /* Adjusted angle for lighting */
+  transform: rotate(45deg);
+  animation: heartPulse 2s infinite ease-in-out;
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.4));
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heart-shape::before,
+.heart-shape::after {
+  content: "";
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: inherit; /* Matches main gradient */
+  z-index: 1;
+}
+
+.heart-shape::before {
+  left: -39px;
+}
+
+.heart-shape::after {
+  top: -39px;
+}
+
+/* Add Cadbury text to the heart to match other pieces */
+.heart-shape .text {
+  position: absolute;
+  z-index: 2;
+  transform: rotate(-90deg); /* Counteracts the 45deg rotation + tilts -45deg */
+  color: rgba(255, 255, 255, 0.9); /* Lighter text for contrast on pink */
+  font-family: "Dancing Script", cursive;
+  font-size: 1.3rem;
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+/* Shine effect on the heart */
+.heart-shape .shine {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.4),
+    transparent 60%
+  );
+  z-index: 3;
+}
+
+@keyframes heartPulse {
+  0% {
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+.piece.heart:hover .heart-shape {
+  animation: none;
+  transform: rotate(45deg) scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6));
+}
+
+.piece.heart.eaten .heart-shape {
+  transform: rotate(720deg) scale(0);
+  opacity: 0;
+  transition: all 0.6s ease-in;
+}
+
+.instruction {
+  color: #4a1e1e;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+/* Celebration Overlay */
+.celebration-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(74, 30, 30, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease-out;
+  border-radius: 8px;
+}
+
+.celebration-content {
+  text-align: center;
+  padding: 1.5rem;
+  color: #fff;
+  max-width: 90%;
+}
+
+.celebration-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.celebration-content p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.restart-btn {
+  background: #6b35a4;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+
+.restart-btn:hover {
+  transform: scale(1.05);
+  background: #7d40bd;
+}
+
+.confetti {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  animation: spin 2s linear infinite;
+  z-index: 1001;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  100% {
+    transform: rotate(360deg) translate(10px, 10px);
+  }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 0; /* Removed horizontal padding */
+  }
+  .container {
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative; /* Added for better positioning */
+  }
+
+  .chocolate-wrapper {
+    width: 95vw; /* Increased width */
+    max-width: 650px;
+    height: auto;
+    aspect-ratio: 2.3/1;
+    transform: scale(0.85); /* Scale down slightly more */
+    transform-origin: center center; /* Ensure scaling from center */
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wrapper-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 8px;
+    transition: none;
+    transform-origin: right center;
+    backface-visibility: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    user-select: none;
+
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    pointer-events: none;
+  }
+  .chocolate {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chocolate-pieces {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .instruction-text {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .chocolate-pieces {
+    gap: 3px;
+    padding: 6px;
+  }
+
+  .piece {
+    border-radius: 3px;
+  }
+
+  .piece::after {
+    font-size: 1.1em;
+  }
+
+  /* Make celebration content mobile-friendly */
+  .celebration-content {
+    width: 80%;
+    padding: 1.5rem;
+  }
+
+  .celebration-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .celebration-content p {
+    font-size: 1rem;
+  }
+
+  .restart-btn {
+    padding: 0.8rem 1.6rem;
+    font-size: 1rem;
+  }
+
+  .confetti {
+    width: 4px;
+    height: 4px;
+  }
+
+  .celebration-content {
+    padding: 1rem;
+  }
+
+  .celebration-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .celebration-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .restart-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg) translate(0, 0);
+    }
+    100% {
+      transform: rotate(360deg) translate(8px, 8px);
+    }
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 380px) {
+  .confetti {
+    width: 3px;
+    height: 3px;
+  }
+
+  .celebration-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .celebration-content p {
+    font-size: 0.8rem;
+  }
+
+  .restart-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Add touch-specific styles */
+@media (hover: none) {
+  .piece:hover {
+    transform: none;
+  }
+
+  .piece:active {
+    transform: scale(0.95); /* Add touch feedback instead */
+  }
+}
+
+/* Add these styles for the daily limit message */
+.daily-limit-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(74, 30, 30, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.daily-limit-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 80%;
+}
+
+.daily-limit-content h2 {
+  color: #4a1e1e;
+  margin-bottom: 1rem;
+}
+
+.daily-limit-content p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Disabled piece style */
+.piece.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .daily-limit-content {
+    padding: 1.5rem;
+  }
+
+  .daily-limit-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .daily-limit-content p {
+    font-size: 0.9rem;
+  }
+}
+
+.credits {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  color: #4a1e1e;
+  font-size: 0.9rem;
+  z-index: 100;
+}
+
+.credits a {
+  color: #4a1e1e;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.credits a:hover {
+  color: #632626;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .credits {
+    bottom: 10px;
+    font-size: 0.8rem;
+  }
+}
